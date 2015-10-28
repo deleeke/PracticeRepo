@@ -2,44 +2,41 @@ import random
 import time
 
 def displayIntro():
-    print('You are in a land full of dragons. In front of you,')
-    print('you see two caves. In one cave, the dragon is friendly')
-    print('and will share his treasure with you. The other dragon')
-    print('is greedy and hungry, and will eat you on sight.')
+    print('You are an oath bound witch. You have sworn to emasculate any jerk that crosses your path')
+    print('In front of you you see two caves. In one there is a supreme total jerk waiting to be told what is.')
+    print('In the other is a bunny.')
     print()
 
 def chooseCave():
     cave = ''
-    while cave != '1' and cave != '2':
+    while cave!='1' and cave!='2':
         print('Which cave will you go into? (1 or 2)')
-        cave = input()
+        cave=input()
 
     return cave
-
 def checkCave(chosenCave):
-    print('You approach the cave...')
+    print('You draw your sword and rush the cave...')
     time.sleep(2)
-    print('It is dark and spooky...')
+    print('It is dank and reeks of socks...')
     time.sleep(2)
-    print('A large dragon jumps out in front of you! He opens his jaws and...')
+    print('A pile of still fleshy bones writhes with maggots and....')
     print()
     time.sleep(2)
 
-    friendlyCave = random.randint(1, 2)
+    friendlyCave=random.randint(1,2)
 
-    if chosenCave == str(friendlyCave):
-         print('Gives you his treasure!')
+    if chosenCave==str(friendlyCave):
+        print('you find a huge jerk passed out on a case of keystone light and totally tell him WH4T iSSSS')
     else:
-         print('Gobbles you down in one bite!')
+        print('in a flash of white, a creature leaps out at you. You have been devoured by an evil BUNNY!')
 
-playAgain = 'yes'
-while playAgain == 'yes' or playAgain == 'y':
-
+playAgain='yes'
+while playAgain=='yes' or playAgain=='y':
     displayIntro()
 
-    caveNumber = chooseCave()
+    caveNumber=chooseCave()
 
     checkCave(caveNumber)
-
-    print('Do you want to play again? (yes or no)')
-    playAgain = input()
+    
+    print('Do you want to play again? (yes means yes)')
+    playAgain=input()

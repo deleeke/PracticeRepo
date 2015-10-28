@@ -1,147 +1,194 @@
 import random
 HANGMANPICS = ['''
 
-  +---+
-  |   |
-      |
-      |
-      |
-      |
-=========''', '''
+ +---+
+ |   |
+     |
+     |
+     |
+     |
+========''','''
 
-  +---+
-  |   |
-  O   |
-      |
-      |
-      |
-=========''', '''
+ +---+
+ |   |
+ O   |
+     |
+     |
+     |
+========''','''
 
-  +---+
-  |   |
-  O   |
-  |   |
-      |
-      |
-=========''', '''
+ +---+
+ |   |
+ O   |
+ |   |
+     |
+     |
+========''','''
 
-  +---+
-  |   |
-  O   |
- /|   |
-      |
-      |
-=========''', '''
+ +---+
+ |   |
+ O   |
+/|   |
+     |
+     |
+========''','''
 
-  +---+
-  |   |
-  O   |
- /|\  |
-      |
-      |
-=========''', '''
+ +---+
+ |   |
+ O   |
+/|\  |
+     |
+     |
+========''','''
 
-  +---+
-  |   |
-  O   |
- /|\  |
- /    |
-      |
-=========''', '''
+ +---+
+ |   |
+ O   |
+/|\  |
+/    |
+     |
+========''','''
 
-  +---+
-  |   |
-  O   |
- /|\  |
- / \  |
-      |
-=========''']
-words = 'ant baboon badger bat bear beaver camel cat clam cobra cougar coyote crow deer dog donkey duck eagle ferret fox frog goat goose hawk lion lizard llama mole monkey moose mouse mule newt otter owl panda parrot pigeon python rabbit ram rat raven rhino salmon seal shark sheep skunk sloth snake spider stork swan tiger toad trout turkey turtle weasel whale wolf wombat zebra'.split()
+ +---+
+ |   |
+ O   |
+/|\  |
+/ \  |
+     |
+========''','''
+ 
++---+
+ |   |
+ O/  |
+/|   |
+/ \  |
+     |
+========''','''
 
-def getRandomWord(wordList):
-    # This function returns a random string from the passed list of strings.
-    wordIndex = random.randint(0, len(wordList) - 1)
-    return wordList[wordIndex]
++---+
+ |   |
+\O/  |
+ |   |
+/ \  |
+     |
+========''','''
+
++---+
+ |   |
+\O/  |
+ |/  |
+/    |
+     |
+========''','''
+
++---+
+ |   |
+\O/  |
+\|/  |
+     |
+     |
+========''','''
+
+ +---+
+ |   |
+ X   |
+/|\  |
+/ \  |
+     |
+========''']
+words ={'Animals':'ant baboon badger bat bear beaver camel cat cattle clam cobra cougar coyote crow deer dog donkey eagle ferret fox frog'.split(),
+        'Colors':'blue green indigo yellow orange teal red pink violet white black purple brown'.split(),
+        'Shapes':'triangle ellipse rhombus trapezoid octagon pentagon septagon parallelogram square chevron'.split(),
+        'Fruits':'watermelon kiwi guava mango strawberry blueberry blackberry cherry apple orange grapefruit grape lemon lime'.split()}
+
+def getRandomWord(wordDict):
+    #this function returns a random string from the passed dictionary of lists of strings, and the key also
+    #First, randomly select a key from the dictionary:
+    wordKey=random.choice(list(wordDict.keys()))
+    #Second, randomly select a word from the key's list in the dictionary
+    wordIndex = random.randint(0,len(wordDict[wordKey])-1)
+    return [wordDict[wordKey][wordIndex],wordKey]
 
 def displayBoard(HANGMANPICS, missedLetters, correctLetters, secretWord):
     print(HANGMANPICS[len(missedLetters)])
     print()
 
-    print('Missed letters:', end=' ')
+    print('Missed letters: ', end=' ')
     for letter in missedLetters:
         print(letter, end=' ')
     print()
 
-    blanks = '_' * len(secretWord)
+    blanks= '_' * len(secretWord)
 
-    for i in range(len(secretWord)): # replace blanks with correctly guessed letters
+    for i in range(len(secretWord)):# replace blanks with correctly guessed letters
         if secretWord[i] in correctLetters:
-            blanks = blanks[:i] + secretWord[i] + blanks[i+1:]
+            blanks = blanks[:i]+secretWord[i]+blanks[i+1:]
 
-    for letter in blanks: # show the secret word with spaces in between each letter
+    for letter in blanks: #show the secret word with spaces in between each letter
         print(letter, end=' ')
     print()
 
 def getGuess(alreadyGuessed):
-    # Returns the letter the player entered. This function makes sure the player entered a single letter, and not something else.
+    #Returns the letter the player entered. This funciton makes sure the player entered a single letter, and not something else
     while True:
         print('Guess a letter.')
-        guess = input()
-        guess = guess.lower()
-        if len(guess) != 1:
+        guess=input()
+        guess=guess.lower()
+        if len(guess) !=1:
             print('Please enter a single letter.')
         elif guess in alreadyGuessed:
-            print('You have already guessed that letter. Choose again.')
+            print('You allready guessed that letter. Guess again.')
         elif guess not in 'abcdefghijklmnopqrstuvwxyz':
             print('Please enter a LETTER.')
         else:
             return guess
-
 def playAgain():
-    # This function returns True if the player wants to play again, otherwise it returns False.
+    # This funtion returns True if the player wants to play again, otherwise it returns False.
     print('Do you want to play again? (yes or no)')
     return input().lower().startswith('y')
 
-
 print('H A N G M A N')
-missedLetters = ''
-correctLetters = ''
-secretWord = getRandomWord(words)
-gameIsDone = False
+missedLetters=''
+correctLetters=''
+secretWord, secretKey=getRandomWord(words)
+gameIsDone=False
 
 while True:
+    print('The secret word is in the set: '+secretKey)
     displayBoard(HANGMANPICS, missedLetters, correctLetters, secretWord)
 
-    # Let the player type in a letter.
-    guess = getGuess(missedLetters + correctLetters)
+    #Let the player type in a letter
+    guess=getGuess(missedLetters+correctLetters)
 
     if guess in secretWord:
-        correctLetters = correctLetters + guess
+        correctLetters=correctLetters+guess
 
-        # Check if the player has won
-        foundAllLetters = True
+        #Check if the player has won
+        foundAllLetters=True
         for i in range(len(secretWord)):
             if secretWord[i] not in correctLetters:
-                foundAllLetters = False
+                foundAllLetters=False
                 break
         if foundAllLetters:
-            print('Yes! The secret word is "' + secretWord + '"! You have won!')
-            gameIsDone = True
+            print('Yes! the secret word is "'+secretWord+'"! YOU HAVE WON!!!')
+
+            gameIsDone=True
     else:
-        missedLetters = missedLetters + guess
+        missedLetters=missedLetters+guess
 
-        # Check if player has guessed too many times and lost
-        if len(missedLetters) == len(HANGMANPICS) - 1:
+        #check if player has guessed too many times and lost
+        if len(missedLetters)==len(HANGMANPICS)-1:
             displayBoard(HANGMANPICS, missedLetters, correctLetters, secretWord)
-            print('You have run out of guesses!\nAfter ' + str(len(missedLetters)) + ' missed guesses and ' + str(len(correctLetters)) + ' correct guesses, the word was "' + secretWord + '"')
-            gameIsDone = True
+            print('You have run out of guesses!\nAfter '+str(len(missedLetters))+' missed guesses and '+str(len(correctLetters))+' correct guesses, the word was"'+secretWord+'"')
+            gameIsDone=True
 
-    # Ask the player if they want to play again (but only if the game is done).
+        #Ask the player if they want to play again (but only if the game is done)
     if gameIsDone:
         if playAgain():
-            missedLetters = ''
-            correctLetters = ''
-            gameIsDone = False
-            secretWord = getRandomWord(words)
+            missedLetters=''
+            correctLetters=''
+            gameIsDone=False
+            secretWord,secretKey=getRandomWord(words)
         else:
             break
+        
