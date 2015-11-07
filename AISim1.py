@@ -250,56 +250,37 @@ while True:
     # Reset the board and game.
     mainBoard = getNewBoard()
     resetBoard(mainBoard)
-    playerTile, computerTile = enterPlayerTile()
-    showHints = False
-    turn = whoGoesFirst()
+    if whoGoesFirst() == 'player':
+        turn = 'X'
+    else:
+        turn = 'O'
     print('The '+turn+' will go first.')
-
+    
     while True:
-        if turn == 'player':
-            # Player's turn
-            if showHints:
-                validMovesBoard = getBoardWithValidMoves(mainBoard, playerTile)
-                drawBoard(validMovesBoard)
-            else:
-                drawBoard(mainBoard)
-            showPoints(playerTile, computerTile)
-            move = getPlayerMove(mainBoard, playerTile)
-            if move == 'quit':
-                print('Thanks for playing!')
-                sys.exit() #terminates the program
-            elif move == 'hints':
-                showHints = not showHints
-                continue
-            else:
-                makeMove(mainBoard, playerTile, move[0], move[1])
-
-            if getValidMoves(mainBoard, computerTile) == []:
-                break
-            else:
-                turn = 'computer'
+        drawBoard(mainBoard)
+        scores = getScoreOfBoard(mainBoard)
+        print('X has %s points. O has %s points.' % (scores['X'],scores['O']))
+        input('Press Enter to continue.')
+        
+        if turn == 'X':
+            # X's turn.
+            otherTile = 'O'
+            x, y = getComputerMove(mainBoard, 'X')
+            makeMove(mainBoard, 'X', x, y)
         else:
-            # Computer's turn.
-            drawBoard(mainBoard)
-            showPoints(playerTile, computerTile)
-            input('Press Enter to see the computer\'s move.')
-            x, y = getComputerMove(mainBoard, computerTile)
-            makeMove(mainBoard, computerTile, x, y)
+            # O's turn.
+            otherTile = 'X'
+            x, y = getComputerMove(mainBoard, 'O')
+            makeMove(mainBoard, 'O', x, y)
 
-            if getValidMoves(mainBoard, playerTile) == []:
-                break
-            else:
-                turn = 'player'
+        if getValidMoves(mainBoard, otherTile) == []:
+            break
+        else:
+            turn = otherTile
+    #Display the final score.
     drawBoard(mainBoard)
     scores = getScoreOfBoard(mainBoard)
-    print('X scored %s points. O scored %s points' % (scores['X'], scores['O']))
-    if scores[playerTile] > scores[computerTile]:
-        print('You beat the computer by %s points! Wow!' % (scores[playerTile]-scores[computerTile]))
-    elif scores[playerTile] < scores[computerTile]:
-        print('You lost. The computer beat you by %s points.' % (scores[computerTile]-scores[playerTile]))
-    else:
-        print('The game was a tie!')
+    print('X scored %s points. O scored %s points.' % (scores['X'], scores['O']))
 
     if not playAgain():
-        break
-
+        sys.exit()
